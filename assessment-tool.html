@@ -52,6 +52,7 @@
   .bubble .tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.65;margin-bottom:6px;}
   .bubble h2{color:#fff;margin:0 0 10px;font-size:17px;}
   .bubble p{font-size:14px;line-height:1.6;margin:0;opacity:.94;}
+  .bubble a{color:#b7e33f;text-underline-offset:3px;}
   .rec-card{background:linear-gradient(135deg,var(--navy),#1a4a94);color:#fff;border-radius:18px;padding:26px 24px;margin-bottom:18px;box-shadow:0 12px 32px rgba(19,58,117,.25);}
   .rec-card .tag{font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.7;}
   .rec-card h2{color:#fff;margin:8px 0 12px;font-size:21px;}
@@ -219,23 +220,23 @@ function combinedLabel(a){
   return industryLabel(a.industry);
 }
 
-/* ============ SELLING CONTENT ============
-   These interstitials fire between questions to show what's forming and why
-   it matters — not just collect data for later, but build the case as we go. */
+/* ============ CUSTOMER CONTEXT ============
+   These interstitials explain what is forming, why it matters, and the
+   independent market evidence behind the recommendation. */
 const STAKES_HOOK = {
-  home_services: "The first five seconds of your site decide whether a homeowner calls you or the next name on the search results.",
-  solar: "Solar deals close on trust before they close on price — and trust gets decided before anyone picks up the phone.",
-  govvendor: "A contracting officer forms an opinion of your credibility before you ever get a meeting — and that opinion is hard to reverse.",
-  infra: "Agencies and operators vet partners on paper long before they vet them in person.",
-  professional: "Clients pick professional services on perceived competence before they ever see the actual work.",
-  nonprofit: "Donors decide whether to trust an organization with their money in the time it takes to scroll past the homepage.",
-  retail: "A buyer decides whether to trust a store within seconds of landing on it — before they've even seen a product.",
-  other: "First impressions get made before anyone reads a word of your pitch.",
+  home_services: "For a home-services business, the digital experience should make service fit, coverage, proof, and the next step easy to verify.",
+  solar: "For a solar business, technical capability needs to become a clear business case for the buyer, site, and buying path in front of it.",
+  govvendor: "For a government vendor, capability must be supported by clear positioning, relevant proof, and procurement readiness.",
+  infra: "For an infrastructure company, technical value has to survive review by operators, procurement teams, partners, and public stakeholders.",
+  professional: "For a professional-services firm, expertise is easier to choose when buyers can understand the problem, method, evidence, and next step.",
+  nonprofit: "For a nonprofit, the digital experience should help donors, partners, and communities understand the mission, evidence, and way to participate.",
+  retail: "For a retail business, customers need a clear path from interest to trust to purchase without unnecessary friction.",
+  other: "For any capable organization, the value becomes easier to buy when the problem, evidence, and next step are clear.",
 };
 const PATH_SELL = {
-  brand: (ind,hook)=> `${hook} When a ${ind} gets everything else right but loses right there, nothing downstream matters — the best pricing, the best team, the best track record never even get seen. This is the step most businesses underinvest in, and it's the one that quietly costs the most.`,
-  system: (ind,hook)=> `Here's the pattern with a ${ind} that outgrows its early setup: the workaround gets built first — a spreadsheet, a shared inbox, a system of sticky notes — and it works, until it doesn't. Then it gets rebuilt twice: once fast and messy under pressure, once for real, later, at a much higher cost. Fixing the structure now is cheaper than the redo.`,
-  work: (ind,hook)=> `Winning public-sector or infrastructure work is a systems game, not a talent game — everyone credible at the table can technically do the work. Who actually wins is whoever engineered the pursuit better before the deadline hit. ${hook}`,
+  brand: (ind,hook)=> `${hook} In LinkedIn and Edelman's 2024 research, 75% of surveyed decision-makers said thought leadership led them to research an offering they had not previously considered. That does not guarantee conversion; it explains why clear buyer education, usable proof, and a specific next step should be treated as business infrastructure, not decoration. <a href="https://www.linkedin.com/business/marketing/blog/research-and-insights/b2b-thought-leadership-research-impact-linkedin-edelman" target="_blank" rel="noopener">View the research</a>.`,
+  system: (ind,hook)=> `${hook} In the U.S. Chamber's 2025 survey, 83% of small businesses said technology platforms helped them compete with larger companies. The useful goal is not more software. It is a connected way for ownership, information, and repeatable steps to move with the work. <a href="https://www.uschamber.com/assets/documents/20251621-CTEC-Empowering-Small-Business-Report-2025-v1-r10-Digital-FINAL.pdf" target="_blank" rel="noopener">View the research</a>.`,
+  work: (ind,hook)=> `${hook} The U.S. Small Business Administration reports that small businesses received nearly 28% of federal prime contracting dollars in FY2025—approximately $179 billion. That is market context, not a promised award. The practical improvement is a disciplined way to qualify opportunities, prepare proof and compliance, and decide where pursuit effort is justified. <a href="https://www.sba.gov/article/2026/06/25/sba-releases-fy25-scorecard-small-business-contracting" target="_blank" rel="noopener">View the scorecard</a>.`,
 };
 
 /* Looks up the human-readable label for whatever a person picked on an earlier
@@ -541,7 +542,20 @@ function resolveContent(step, a){ return step.dynamic ? Object.assign({key:step.
 
 let current = 'intro';
 let history_ = [];
-let answers = {};
+function getRequestedPath(){
+  try {
+    const ownPath = new URLSearchParams(window.location.search).get('path');
+    const parentPath = window.parent && window.parent !== window
+      ? new URLSearchParams(window.parent.location.search).get('path')
+      : '';
+    const candidate = ownPath || parentPath || '';
+    return ['brand','system','work'].includes(candidate) ? candidate : '';
+  } catch(error) {
+    return '';
+  }
+}
+const requestedPath = getRequestedPath();
+let answers = requestedPath ? {path:requestedPath} : {};
 
 function estimateProgress(){
   return Math.min(100, Math.round((history_.length/10)*100));
