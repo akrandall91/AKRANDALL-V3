@@ -1,7 +1,7 @@
 window.AKRD_LEAD_CONFIG = Object.freeze({
   // Paste the deployed Google Apps Script /exec URL here after following
   // integrations/google-apps-script/README.md.
-  appsScriptUrl: '',
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbyKdl0TmxpKuSDlDjwBVBZY1IgiQ0OL2M3XhmHdUvrlQa6j6vP9a5jRWD2FQ0fVN_p3/exec',
   // Paste the GA4 web stream Measurement ID here (format: G-XXXXXXXXXX).
   analyticsMeasurementId: '',
   // First-party events power the emailed performance reports. They are sent
