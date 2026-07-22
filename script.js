@@ -25,6 +25,15 @@
 
   document.querySelectorAll('a[href*="assessment.html"]').forEach(bindAssessmentLink);
 
+  document.querySelectorAll('a[data-guide-download]').forEach(link => {
+    link.addEventListener('click', () => trackConversion('guide_download', {
+      sourcePage: window.location.pathname,
+      guide: link.dataset.guideDownload || 'service-guide',
+      depth: link.dataset.guideDepth || 'unspecified',
+      file: link.getAttribute('href') || ''
+    }));
+  });
+
   document.querySelectorAll('a[href*="calendar.app.google"]').forEach(link => {
     if (link.hasAttribute('data-booking-fallback')) return;
     link.href = isConnectPage ? '#schedule' : 'connect.html#schedule';
@@ -72,6 +81,21 @@
   if (bookingFallback && leadConfig.calendarFallbackUrl) bookingFallback.href = leadConfig.calendarFallbackUrl;
 
   const footerNav = document.querySelector('.footer-links[aria-label="Footer"]');
+  const primaryNav = document.querySelector('.site-nav');
+  if (primaryNav && !primaryNav.querySelector('a[href="resources.html"]')) {
+    const resourcesLink = document.createElement('a');
+    resourcesLink.href = 'resources.html';
+    resourcesLink.textContent = 'Resources';
+    const aboutLink = primaryNav.querySelector('a[href="about.html"]');
+    primaryNav.insertBefore(resourcesLink, aboutLink || primaryNav.firstChild);
+  }
+  if (footerNav && !footerNav.querySelector('a[href="resources.html"]')) {
+    const resourcesLink = document.createElement('a');
+    resourcesLink.href = 'resources.html';
+    resourcesLink.textContent = 'Resources';
+    const proofLink = footerNav.querySelector('a[href="work.html"]');
+    footerNav.insertBefore(resourcesLink, proofLink || footerNav.firstChild);
+  }
   if (footerNav && !footerNav.querySelector('a[href="assessment.html"]')) {
     const assessmentLink = document.createElement('a');
     assessmentLink.href = 'assessment.html';

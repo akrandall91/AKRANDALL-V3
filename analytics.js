@@ -15,6 +15,7 @@
     'assessment_open',
     'assessment_complete',
     'assessment_booking_click',
+    'guide_download',
     'generate_lead',
     'scroll_depth'
   ]);
@@ -122,6 +123,9 @@
       industry: cleanValue(detail.industry, 120),
       recommendation: cleanValue(detail.recommendation, 160),
       tier: cleanValue(detail.tier, 80),
+      guide: cleanValue(detail.guide, 120),
+      depth: cleanValue(detail.depth, 40),
+      file: cleanValue(detail.file, 180),
       scrollPercent: cleanValue(detail.scrollPercent, 3)
     };
   }
@@ -136,6 +140,9 @@
       industry: source.industry,
       recommendation: source.recommendation,
       assessment_tier: source.tier,
+      guide_name: source.guide,
+      guide_depth: source.depth,
+      file_name: source.file,
       lead_source: source.leadSource,
       percent_scrolled: source.scrollPercent
     }).filter(([, value]) => value !== undefined && value !== null && value !== ''));
