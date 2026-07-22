@@ -14,6 +14,17 @@
     document.dispatchEvent(new CustomEvent('akrd:conversion', { detail: event }));
   };
 
+  const bindAssessmentLink = link => {
+    if (!link || link.dataset.assessmentTracked) return;
+    link.dataset.assessmentTracked = 'true';
+    link.addEventListener('click', () => trackConversion('assessment_open', {
+      sourcePage: window.location.pathname,
+      label: link.dataset.assessmentCta || (link.closest('.site-footer') ? 'footer' : link.textContent.trim())
+    }));
+  };
+
+  document.querySelectorAll('a[href*="assessment.html"]').forEach(bindAssessmentLink);
+
   document.querySelectorAll('a[href*="calendar.app.google"]').forEach(link => {
     if (link.hasAttribute('data-booking-fallback')) return;
     link.href = isConnectPage ? '#schedule' : 'connect.html#schedule';
@@ -32,15 +43,27 @@
   });
 
   if (!isConnectPage && !isPrivacyPage && !isAssessmentPage) {
-    const mobileBookingBar = document.createElement('a');
-    mobileBookingBar.className = 'mobile-booking-bar';
-    mobileBookingBar.href = 'connect.html#schedule';
-    mobileBookingBar.textContent = 'Book a free intro call';
-    mobileBookingBar.addEventListener('click', () => trackConversion('scheduler_open', {
+    const mobileConversionBar = document.createElement('div');
+    mobileConversionBar.className = 'mobile-conversion-bar';
+    mobileConversionBar.setAttribute('role', 'navigation');
+    mobileConversionBar.setAttribute('aria-label', 'Quick actions');
+
+    const mobileAssessmentLink = document.createElement('a');
+    mobileAssessmentLink.href = 'assessment.html';
+    mobileAssessmentLink.dataset.assessmentCta = 'mobile-sticky';
+    mobileAssessmentLink.textContent = 'Free assessment';
+    bindAssessmentLink(mobileAssessmentLink);
+
+    const mobileBookingLink = document.createElement('a');
+    mobileBookingLink.href = 'connect.html#schedule';
+    mobileBookingLink.textContent = 'Book a free call';
+    mobileBookingLink.addEventListener('click', () => trackConversion('scheduler_open', {
       sourcePage: window.location.pathname,
-      label: 'Mobile booking bar'
+      label: 'Mobile conversion dock'
     }));
-    document.body.append(mobileBookingBar);
+
+    mobileConversionBar.append(mobileAssessmentLink, mobileBookingLink);
+    document.body.append(mobileConversionBar);
   }
 
   const bookingFrame = document.querySelector('[data-booking-frame]');
@@ -53,6 +76,7 @@
     const assessmentLink = document.createElement('a');
     assessmentLink.href = 'assessment.html';
     assessmentLink.textContent = 'Free assessment';
+    bindAssessmentLink(assessmentLink);
     footerNav.append(assessmentLink);
   }
   if (footerNav && !footerNav.querySelector('a[href="privacy.html"]')) {
@@ -100,7 +124,7 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.toggle('motion-reduced', reduceMotion);
 
-  document.querySelectorAll('.problem-grid, .service-grid, .values-grid, .chain, .case-grid, .recognition-grid, .tier-grid, .audience-grid, .home-diagnostic-grid, .home-paths-grid, .home-method-grid, .home-proof-story-metrics').forEach(group => {
+  document.querySelectorAll('.problem-grid, .service-grid, .values-grid, .chain, .case-grid, .recognition-grid, .tier-grid, .audience-grid, .home-diagnostic-grid, .home-paths-grid, .home-industry-grid, .home-method-grid, .home-proof-story-metrics').forEach(group => {
     [...group.children].forEach((item, index) => item.style.setProperty('--reveal-delay', `${Math.min(index * 85, 340)}ms`));
   });
 
@@ -431,7 +455,7 @@
       document.documentElement.style.setProperty('--pointer-y', `${event.clientY}px`);
     }, { passive: true });
 
-    document.querySelectorAll('.audience-card, .case-card, .recognition-card, .tier-card, .system-card').forEach(card => {
+    document.querySelectorAll('.audience-card, .case-card, .recognition-card, .tier-card, .system-card, .industry-card, .proof-v2-transfer-grid article').forEach(card => {
       card.classList.add('tilt-card');
       const glare = document.createElement('span');
       glare.className = 'tilt-glare';

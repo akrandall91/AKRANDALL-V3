@@ -12,6 +12,7 @@
     'form_success',
     'form_fallback',
     'assessment_start',
+    'assessment_open',
     'assessment_complete',
     'assessment_booking_click',
     'generate_lead',

@@ -48,6 +48,7 @@ const ALLOWED_ANALYTICS_EVENTS = [
   'form_submit',
   'form_success',
   'form_fallback',
+  'assessment_open',
   'assessment_start',
   'assessment_complete',
   'assessment_booking_click',
@@ -302,7 +303,7 @@ function sendAnalyticsReport_(days, label, forceSend, reportEnd) {
   const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
   const current = collectReportData_(spreadsheet, start, end, properties);
   const previous = collectReportData_(spreadsheet, previousStart, start, properties);
-  const hasActivity = current.pageViews || current.leads || current.schedulerOpens || current.assessmentsStarted;
+  const hasActivity = current.pageViews || current.leads || current.schedulerOpens || current.assessmentClicks || current.assessmentsStarted;
   const sendEmptyReports = properties.getProperty('SEND_EMPTY_REPORTS') === 'true';
   if (!forceSend && !sendEmptyReports && !hasActivity) return;
 
@@ -324,6 +325,7 @@ function collectReportData_(spreadsheet, start, end, properties) {
     pageViews: 0,
     sessions: 0,
     schedulerOpens: 0,
+    assessmentClicks: 0,
     formStarts: 0,
     formSuccesses: 0,
     assessmentsStarted: 0,
@@ -332,6 +334,7 @@ function collectReportData_(spreadsheet, start, end, properties) {
     bookings: 0,
     topPages: [],
     topSources: [],
+    topAssessmentCtas: [],
     devices: []
   };
 
@@ -343,6 +346,7 @@ function collectReportData_(spreadsheet, start, end, properties) {
     const sessions = {};
     const pages = {};
     const sources = {};
+    const assessmentCtas = {};
     const devices = {};
 
     values.slice(1).forEach(row => {
@@ -364,6 +368,10 @@ function collectReportData_(spreadsheet, start, end, properties) {
         increment_(devices, String(row[columns.Device] || 'Unknown'));
       }
       if (eventName === 'scheduler_open') result.schedulerOpens += 1;
+      if (eventName === 'assessment_open') {
+        result.assessmentClicks += 1;
+        increment_(assessmentCtas, String(row[columns.Label] || 'Unlabeled assessment link'));
+      }
       if (eventName === 'form_start') result.formStarts += 1;
       if (eventName === 'form_success') result.formSuccesses += 1;
       if (eventName === 'assessment_start') result.assessmentsStarted += 1;
@@ -373,6 +381,7 @@ function collectReportData_(spreadsheet, start, end, properties) {
     result.sessions = Object.keys(sessions).length;
     result.topPages = rankCounts_(pages, 5);
     result.topSources = rankCounts_(sources, 5);
+    result.topAssessmentCtas = rankCounts_(assessmentCtas, 5);
     result.devices = rankCounts_(devices, 3);
   }
 
@@ -402,6 +411,7 @@ function buildReportHtml_(label, range, current, previous, spreadsheetUrl) {
     ['Bookings linked', current.bookings, comparison_(current.bookings, previous.bookings)],
     ['Visitor-to-lead rate', conversionRate, ''],
     ['Booking clicks', current.schedulerOpens, comparison_(current.schedulerOpens, previous.schedulerOpens)],
+    ['Assessment clicks', current.assessmentClicks, comparison_(current.assessmentClicks, previous.assessmentClicks)],
     ['Assessments started', current.assessmentsStarted, comparison_(current.assessmentsStarted, previous.assessmentsStarted)],
     ['Assessments completed', current.assessmentsCompleted, comparison_(current.assessmentsCompleted, previous.assessmentsCompleted)],
     ['Forms started', current.formStarts, comparison_(current.formStarts, previous.formStarts)],
@@ -413,7 +423,7 @@ function buildReportHtml_(label, range, current, previous, spreadsheetUrl) {
     '<div style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #dce3eb">' +
     '<div style="padding:28px;background:#06101d;color:#ffffff"><p style="margin:0 0 8px;color:#72e6c1;font-size:12px;letter-spacing:1.5px;text-transform:uppercase">AK Randall Digital</p><h1 style="margin:0;font-size:28px">' + escapeHtml_(label) + ' site report</h1><p style="margin:10px 0 0;color:#c7d0da">' + escapeHtml_(range) + '</p></div>' +
     '<div style="padding:24px"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:10px 12px;background:#eef2f6">Signal</th><th style="text-align:left;padding:10px 12px;background:#eef2f6">Result</th><th style="text-align:left;padding:10px 12px;background:#eef2f6">vs. prior period</th></tr></thead><tbody>' + metricRows + '</tbody></table>' +
-    rankedSection_('Top pages', current.topPages) + rankedSection_('Traffic sources', current.topSources) + rankedSection_('Devices', current.devices) +
+    rankedSection_('Top pages', current.topPages) + rankedSection_('Assessment entry points', current.topAssessmentCtas) + rankedSection_('Traffic sources', current.topSources) + rankedSection_('Devices', current.devices) +
     '<p style="margin:24px 0 0"><a style="display:inline-block;background:#2457ff;color:#ffffff;text-decoration:none;padding:12px 18px;font-weight:700" href="' + escapeHtml_(spreadsheetUrl) + '">Open the reporting sheet</a></p>' +
     '<p style="margin:20px 0 0;color:#66717e;font-size:12px;line-height:1.5">Analytics reports contain aggregate site activity. Lead contact details remain in the private Website Leads sheet and are not sent to Google Analytics.</p></div></div></div>';
 }
@@ -430,10 +440,12 @@ function buildReportText_(label, range, current, previous, spreadsheetUrl) {
     'Bookings linked: ' + current.bookings + ' (' + comparison_(current.bookings, previous.bookings) + ')',
     'Visitor-to-lead rate: ' + conversionRate,
     'Booking clicks: ' + current.schedulerOpens,
+    'Assessment clicks: ' + current.assessmentClicks,
     'Assessments: ' + current.assessmentsStarted + ' started / ' + current.assessmentsCompleted + ' completed',
     'Forms: ' + current.formStarts + ' started / ' + current.formSuccesses + ' delivered',
     '',
     'Top pages: ' + rankedText_(current.topPages),
+    'Assessment entry points: ' + rankedText_(current.topAssessmentCtas),
     'Traffic sources: ' + rankedText_(current.topSources),
     'Devices: ' + rankedText_(current.devices),
     '',

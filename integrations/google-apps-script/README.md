@@ -43,11 +43,11 @@ The public `/exec` URL accepts only an allowlist of analytics events. Analytics 
 
 ## 3. Verify the full reporting loop
 
-1. Visit several pages, scroll past 50%, open the booking panel, and start the assessment. Confirm a `Site Analytics` tab is created and receives rows.
+1. Visit several pages, click assessment buttons from different locations, scroll past 50%, open the booking panel, and start the assessment. Confirm a `Site Analytics` tab is created and receives rows.
 2. Submit one standard inquiry and one completed assessment. Confirm each creates a `Website Leads` row and sends an immediate notification email.
 3. In Apps Script, run `sendTestAnalyticsReport`. Confirm the branded seven-day summary arrives at `REPORT_EMAIL`.
 4. Book a test appointment using the same email as a test lead, run `syncCalendarBookings`, and confirm the lead becomes **Appointment booked** and a booking-linked notification is sent.
-5. In GA4 Realtime, confirm `scheduler_open`, `assessment_start`, `assessment_complete`, `form_start`, `form_success`, and `generate_lead` appear as expected.
+5. In GA4 Realtime, confirm `scheduler_open`, `assessment_open`, `assessment_start`, `assessment_complete`, `form_start`, `form_success`, and `generate_lead` appear as expected. The emailed reports rank the assessment entry points so you can see which CTA placements are earning clicks.
 
 After changing `Code.gs`, update the existing Apps Script deployment to a new version. After changing either ID in `lead-config.js`, redeploy the website.
 
