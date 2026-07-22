@@ -1328,7 +1328,7 @@ main { overflow-x: clip; overflow-y: visible; }
   left: 0;
   width: 42%;
   height: 4px;
-  background: linear-gradient(90deg,var(--blue),var(--cyan),var(--orange));
+  background: linear-gradient(90deg,var(--blue),var(--cyan),var(--coral));
 }
 .assessment-hero-grid {
   display: grid;
@@ -1381,4 +1381,61 @@ main { overflow-x: clip; overflow-y: visible; }
   .assessment-frame-top { padding: 0 14px; }
   .assessment-frame-top span:last-child { display: none; }
   .assessment-frame { height: 900px; }
+}
+
+/* Final typography and legibility polish */
+h1, h2, h3, blockquote,
+.display, .headline, .subhead { text-wrap: balance; }
+
+p, li, .lead, .page-intro { text-wrap: pretty; }
+
+.home-section-heading > *,
+.home-paths-heading > * { min-width: 0; }
+
+.brand-wordmark small { font-size: .54rem; }
+.micro, .card-number { font-size: .72rem; }
+.field label { font-size: .72rem; }
+.conversion-microcopy, .home-hero-trust { font-size: .68rem; }
+.footer-links strong { font-size: .72rem; }
+.footer-bottom { font-size: .7rem; }
+
+.home-proof-grid span { font-size: .68rem; }
+.home-diagnostic-grid article > span { font-size: .68rem; }
+.home-diagnostic-grid a { font-size: .72rem; }
+.home-scroll-footer { font-size: .64rem; }
+
+.proof-v2-hero-rail span,
+.proof-v2-story-copy > span,
+.proof-v2-value-stack span,
+.proof-v2-field-card figcaption span { font-size: .68rem; }
+.proof-v2-paths span { font-size: .66rem; }
+
+.coverage-metrics span { font-size: .68rem; }
+.coverage-map-kicker { font-size: .66rem; }
+.coverage-year-ticks { font-size: .62rem; }
+.coverage-play { min-height: 44px; font-size: .68rem; }
+.coverage-filters button,
+.coverage-layers button { min-height: 44px; font-size: .66rem; line-height: 1.25; }
+.coverage-layers button > span { font-size: .61rem; }
+.coverage-record summary { min-height: 48px; align-items: center; font-size: .66rem; }
+.coverage-list-copy > span { font-size: .64rem; }
+.coverage-popup .micro { font-size: .62rem; }
+.coverage-popup > span:last-child { font-size: .64rem; }
+
+.booking-facts span { font-size: .68rem; }
+.assessment-benefits li > span { font-size: .7rem; }
+.assessment-talk-option { font-size: .72rem; }
+.assessment-frame-top { font-size: .66rem; }
+
+@media (max-width: 640px) {
+  .home-scroll-copy .eyebrow { font-size: .66rem; letter-spacing: .09em; }
+  .home-scroll-copy .button { font-size: .7rem; }
+  .home-scroll-footer { grid-template-columns: 164px 1fr; font-size: .62rem; letter-spacing: .07em; }
+  .home-proof-grid span { font-size: .66rem; }
+  .mobile-booking-bar { font-size: .72rem; }
+  .proof-v2-hero-rail span { font-size: .64rem; }
+  .proof-v2-paths span { font-size: .64rem; }
+  .coverage-filters button,
+  .coverage-layers button { font-size: .66rem; }
+  .coverage-layers button > span { font-size: .61rem; }
 }
