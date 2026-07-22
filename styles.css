@@ -2048,3 +2048,51 @@ p, li, .lead, .page-intro { text-wrap: pretty; }
   .footer-bottom.footer-bottom--with-credit { grid-template-columns: 1fr; }
   .footer-bottom--with-credit > span:last-child { text-align: left; }
 }
+
+/* Complete services + capabilities publication */
+.resource-complete-card {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  min-height: 590px;
+  margin-bottom: 1px;
+  color: #fff;
+  background: #06101d;
+  border: 1px solid rgba(255,255,255,.15);
+}
+.resource-complete-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 58px;
+  background: radial-gradient(circle at 0 100%,rgba(61,90,254,.2),transparent 44%),#06101d;
+}
+.resource-complete-copy .resource-card-index { color: var(--sage); }
+.resource-complete-copy h3 {
+  max-width: 600px;
+  margin: 74px 0 20px;
+  font: 720 clamp(2.8rem,4.5vw,5rem)/.9 var(--display);
+  letter-spacing: -.055em;
+}
+.resource-complete-copy > p { max-width: 610px; margin: 0; color: rgba(255,255,255,.68); line-height: 1.65; }
+.resource-complete-copy ul { display: grid; gap: 8px; margin: 26px 0 38px; padding: 0; color: rgba(255,255,255,.66); list-style: none; }
+.resource-complete-copy li::before { content: '—'; margin-right: 9px; color: var(--sage); }
+.resource-complete-copy .resource-download { margin-top: auto; border-color: rgba(255,255,255,.25); color: #fff; }
+.resource-complete-visual { position: relative; min-width: 0; margin: 0; overflow: hidden; background: #020916; }
+.resource-complete-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(6,16,29,.28),transparent 28%),linear-gradient(0deg,rgba(2,9,22,.9),transparent 30%); pointer-events: none; }
+.resource-complete-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.resource-complete-visual figcaption { position: absolute; z-index: 1; right: 30px; bottom: 28px; left: 30px; color: rgba(255,255,255,.72); font: 600 .66rem/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  .resource-complete-card { grid-template-columns: 1fr; }
+  .resource-complete-visual { min-height: 430px; order: -1; }
+  .resource-complete-copy h3 { margin-top: 52px; }
+}
+
+@media (max-width: 640px) {
+  .resource-complete-card { min-height: 0; }
+  .resource-complete-copy { padding: 34px 28px; }
+  .resource-complete-copy h3 { margin-top: 44px; font-size: 3rem; }
+  .resource-complete-visual { min-height: 330px; }
+}
