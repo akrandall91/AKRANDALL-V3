@@ -103,7 +103,7 @@ function reportAssessmentHeight(){
 const INDUSTRIES = [
   {value:'home_services', label:'Home Services & Contracting', desc:'HVAC, plumbing, electrical, landscaping, roofing', emoji:'🏠'},
   {value:'solar', label:'Solar / Renewable Energy', emoji:'☀️'},
-  {value:'govvendor', label:'Government / Public-Sector Vendor', desc:'Selling into agencies, cooperative vehicles, RFPs', emoji:'🏛️'},
+  {value:'govvendor', label:'Government / Public-Sector Vendor', desc:'Registration, vendor portals, agency buyers, proposals', emoji:'🏛️'},
   {value:'infra', label:'Transit / Mobility / Smart Infrastructure', emoji:'🚆'},
   {value:'professional', label:'Professional Services', desc:'Legal, accounting, consulting', emoji:'💼'},
   {value:'nonprofit', label:'Nonprofit / Community Organization', emoji:'❤️'},
@@ -116,8 +116,8 @@ const PATH_COPY = {
     descs:{ brand:'Get a site that turns lookers into booked jobs.', system:'Stop losing leads between the phone, texts, and a notebook.', work:'Pursue commercial or government facility contracts.' } },
   solar: { sub:"We'll ask how you're actually selling — residential, commercial, or government.",
     descs:{ brand:'A site built to convert homeowner or commercial leads.', system:'Connect leads, installs, and follow-up into one pipeline.', work:'Break into government, utility, or cooperative-vehicle sales.' } },
-  govvendor: { sub:"We'll ask about your capture and cooperative-vehicle position.",
-    descs:{ brand:'A site that reads as credible to contracting officers.', system:'Organize your capture, proposal, and compliance workflow.', work:'Build the cooperative-vehicle and capture infrastructure to actually win.' } },
+  govvendor: { sub:"We'll ask where you are between registration, market entry, and active pursuit.",
+    descs:{ brand:'Build buyer-ready positioning, capability material, and proof.', system:'Organize vendor profiles, capture, proposals, and follow-through.', work:'Build the market-entry and pursuit infrastructure to compete.' } },
   infra: { sub:"We'll ask whether this is one relationship or a broader market push.",
     descs:{ brand:'A site that positions you for agency and operator buyers.', system:'Connect field data, ops, and reporting into one system.', work:'Build capture infrastructure for transit, EV, or smart-city pursuits.' } },
   professional: { sub:"We'll ask whether this is about new clients or serving current ones better.",
@@ -135,8 +135,8 @@ const INDUSTRY_SIGNAL = {
     options:[{value:'referral',label:'Word of mouth / referrals'},{value:'ads',label:'Paid ads or online search'},{value:'repeat',label:'Repeat customers'},{value:'mixed',label:"It's a mix, nothing dominant"}] },
   solar: { question:'Who are you actually selling to?',
     options:[{value:'residential',label:'Homeowners (residential)'},{value:'commercial',label:'Businesses (commercial)'},{value:'government',label:'Government / utility / institutional'},{value:'mixed',label:'A mix of these'}] },
-  govvendor: { question:'Which cooperative contract vehicles or agencies are you already working with, if any?',
-    options:[{value:'several',label:'Several active vehicles or agency relationships'},{value:'one',label:'One or two'},{value:'none',label:'None yet — starting from scratch'}] },
+  govvendor: { question:'How established is your public-sector market position today?',
+    options:[{value:'several',label:'Active vehicles, agency relationships, or contracts'},{value:'one',label:'Registered with some targets or pursuits identified'},{value:'none',label:'Starting with registration and market selection'}] },
   infra: { question:'Is this for a specific transit or infrastructure relationship already in motion, or broader market positioning?',
     options:[{value:'specific',label:'A specific relationship already in motion'},{value:'broad',label:'Broader market positioning'},{value:'both',label:'Both'}] },
   professional: { question:'Is this mainly about attracting new clients, or better supporting the ones you have?',
@@ -454,18 +454,18 @@ const STEPS = {
   work_focus: {
     type:'single', key:'work_focus', question:'Where is your focus?',
     options:[
-      {value:'gov',label:'Government contracts',desc:'Cooperative vehicles, RFPs, agency buyers'},
+      {value:'gov',label:'Government contracts',desc:'Registration, vendor portals, agency buyers, proposals'},
       {value:'infra',label:'Infrastructure & smart-city market',desc:'Positioning for transit, solar, EV, public works'},
       {value:'both',label:'Both'},
     ],
     next:()=>'work_vehicles'
   },
   work_vehicles: {
-    type:'single', key:'work_vehicles', question:'Do you have any cooperative contract vehicles today? (GSA, TIPS, etc.)',
+    type:'single', key:'work_vehicles', question:'How far have you built the foundation for public-sector selling?',
     options:[
-      {value:'several',label:'Yes, several'},
-      {value:'one',label:'Yes, one or two'},
-      {value:'none',label:'Not yet'},
+      {value:'several',label:'Active registrations, portals, and contract pathways'},
+      {value:'one',label:'Some accounts or vendor profiles are in place'},
+      {value:'none',label:'Not yet — I need help starting'},
     ],
     next:()=>'current_assets_work'
   },
@@ -474,6 +474,8 @@ const STEPS = {
     sub:'Select all that apply — this is the difference between starting cold and having real leverage.',
     options:[
       {value:'sam', label:'Active SAM.gov registration', emoji:'📋'},
+      {value:'portals', label:'Agency or state/local vendor accounts', emoji:'🏛️'},
+      {value:'capability', label:'Capability statement or buyer-ready service material', emoji:'📄'},
       {value:'past_perf', label:'Documented past performance', desc:'References, case studies, completed contracts', emoji:'📁'},
       {value:'certs', label:'Socioeconomic certifications', desc:'8(a), WOSB, HUBZone, SDVOSB, etc.', emoji:'🏅'},
       {value:'none', label:'None of this yet', emoji:'🌱'},

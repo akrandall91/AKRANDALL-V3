@@ -110,6 +110,15 @@
     footerNav.append(privacyLink);
   }
 
+  const footerBottom = document.querySelector('.footer-bottom');
+  if (footerBottom && !footerBottom.querySelector('.footer-media-credit')) {
+    const mediaCredit = document.createElement('span');
+    mediaCredit.className = 'footer-media-credit';
+    mediaCredit.textContent = 'Original field photography + video by Andrew Randall';
+    footerBottom.classList.add('footer-bottom--with-credit');
+    footerBottom.insertBefore(mediaCredit, footerBottom.lastElementChild);
+  }
+
   const assessmentFrame = document.getElementById('growth-assessment');
   window.addEventListener('message', event => {
     if (!assessmentFrame || event.source !== assessmentFrame.contentWindow || !event.data) return;
