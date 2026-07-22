@@ -1,7 +1,7 @@
 /**
  * Public-safe coverage data.
  *
- * Pursuit and win totals are anonymized aggregates from the 2024-2026 CRM
+ * Pursuit and confirmed-project totals are anonymized aggregates from the 2024-2026 CRM
  * export. Region coordinates are centroids, not customer or project sites.
  * Dossiers are distilled from the procurement evidence register and omit
  * agency, employer, competitor, contact, pricing, and contract identifiers.
@@ -9,7 +9,7 @@
  */
 window.AKRD_COVERAGE = {
   meta: {
-    updated: '2026-07-21',
+    updated: '2026-07-22',
     pursuitRecords: 351,
     locationResolvedPursuits: 342,
     locationUnresolvedPursuits: 9,
@@ -22,7 +22,7 @@ window.AKRD_COVERAGE = {
     winRegions: 20,
     winCityPairs: 37,
     dossiers: 8,
-    confirmedAwardsOrAgreements: 6,
+    confirmedAwardsOrAgreements: 8,
     multiYearVehicles: 5,
     purchaseOrders: 2,
     mappedFieldRecords: 41,
@@ -83,8 +83,8 @@ window.AKRD_COVERAGE = {
     { id: 'd2', year: 2025, lat: 28.5, lng: -81.4, location: 'Central Florida', category: 'Smart Infrastructure', title: 'Executed design-build contract', path: 'Master agreement', detail: 'A competitive response became an executed contract for future service authorizations.', evidence: 'Contract confirmed', level: 4, confirmed: true, multiYear: true, po: false },
     { id: 'd3', year: 2025, lat: 33.9, lng: -118.2, location: 'Southern California', category: 'Transit', title: 'Master agreement to delivery order', path: 'Task-order procurement', detail: 'Standing agreement, itemized order, engineering submittal, installation scope, and scheduled delivery.', evidence: 'Order confirmed', level: 5, confirmed: true, multiYear: true, po: true },
     { id: 'd4', year: 2025, lat: 26.7, lng: -80.1, location: 'Southeast Florida', category: 'Transit', title: 'Countywide requirements contract', path: 'Multi-category contract', detail: 'Pre-established categories and pricing converted into an issued delivery order.', evidence: 'Order confirmed', level: 5, confirmed: true, multiYear: true, po: true },
-    { id: 'd5', year: 2025, lat: 41.1, lng: -73.8, location: 'Lower Hudson Valley', category: 'Transit', title: 'Prime-contractor supply pursuit', path: 'Distributor-led public work', detail: 'Technical scope, phased quantities, drawings, and supplier pricing prepared for a public-works bidder.', evidence: 'Proposal supported; outcome not confirmed', level: 2, confirmed: false, multiYear: true, po: false },
-    { id: 'd6', year: 2025, lat: 34.18, lng: -118.53, location: 'Southern California', category: 'Parks & Trails', title: 'Product specified in public plans', path: 'Specified-product strategy', detail: 'A named technical specification created demand through prospective prime contractors; the final order is not confirmed.', evidence: 'Specification confirmed; order not confirmed', level: 3, confirmed: false, multiYear: false, po: false },
+    { id: 'd5', year: 2025, lat: 41.1, lng: -73.8, location: 'Lower Hudson Valley', category: 'Transit', title: 'Prime-contractor supply project', path: 'Distributor-led public work', detail: 'Technical scope, phased quantities, drawings, and supplier pricing supported a confirmed customer project through a public-works bidder.', evidence: 'Customer project confirmed', level: 2, confirmed: true, multiYear: true, po: false },
+    { id: 'd6', year: 2025, lat: 34.18, lng: -118.53, location: 'Southern California', category: 'Parks & Trails', title: 'Specified-product public project', path: 'Specified-product strategy', detail: 'A named technical specification created demand through prime contractors and became a confirmed customer project.', evidence: 'Customer project confirmed', level: 3, confirmed: true, multiYear: false, po: false },
     { id: 'd7', year: 2026, lat: 25.8, lng: -80.3, location: 'South Florida', category: 'Smart Infrastructure', title: 'Head-to-head public selection', path: 'Cooperative comparison', detail: 'Site visit, photometrics, stamped engineering, physical demonstration, and formal public selection.', evidence: 'Selection confirmed', level: 5, confirmed: true, multiYear: false, po: false },
     { id: 'd8', year: 2026, lat: 27.95, lng: -82.46, location: 'Florida Gulf Coast', category: 'Transit', title: 'Best-value technology award', path: 'Competitive RFP', detail: 'Formal scoring favored the stronger technical and lifecycle position, not simply the lowest initial price.', evidence: 'Award confirmed; full terms not yet public', level: 4, confirmed: true, multiYear: false, po: false }
   ],

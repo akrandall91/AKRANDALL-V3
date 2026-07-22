@@ -8,6 +8,7 @@
   const fieldProjects = Array.isArray(coverage.fieldProjects) ? coverage.fieldProjects : [];
   const pursuitRegions = Array.isArray(coverage.pursuitRegions) ? coverage.pursuitRegions : [];
   const dossiers = Array.isArray(coverage.dossiers) ? coverage.dossiers : [];
+  const confirmedDossiers = dossiers.filter((item) => item.confirmed);
   const meta = coverage.meta || {};
   const pursuitSummary = coverage.pursuitSummary || {};
 
@@ -43,8 +44,8 @@
   };
   const layerConfig = {
     pursuits: { minYear: 2024, maxYear: 2026, title: 'Opportunity coverage', kicker: 'Public-sector opportunities' },
-    wins: { minYear: null, maxYear: null, title: 'Advanced outcomes', kicker: 'Accepted or fulfilled' },
-    verified: { minYear: 2025, maxYear: 2026, title: 'Procurement pathways', kicker: 'Documented public buying paths' },
+    wins: { minYear: null, maxYear: null, title: 'Confirmed customer projects', kicker: 'Accepted or fulfilled work' },
+    verified: { minYear: 2025, maxYear: 2026, title: 'Confirmed contract proof', kicker: 'Awards, agreements, and orders' },
     field: { minYear: 2021, maxYear: 2026, title: 'Field projects', kicker: 'Infrastructure in operation' }
   };
 
@@ -85,11 +86,11 @@
         lng: region.lng,
         location: region.label,
         region: region.region,
-        category: mode === 'wins' ? 'Accepted or fulfilled' : 'Public-sector opportunities',
-        title: mode === 'wins' ? 'Advanced opportunity outcomes' : 'Opportunity coverage',
+        category: mode === 'wins' ? 'Confirmed customer projects' : 'Public-sector opportunities',
+        title: mode === 'wins' ? 'Confirmed customer projects' : 'Opportunity coverage',
         detail: mode === 'wins'
-          ? `${formatCount(value)} accepted or fulfilled opportunities in this market.`
-          : `${formatCount(value)} opportunities evaluated through ${selectedYear}; ${formatCount(outcomes)} reached an accepted or fulfilled status.`,
+          ? `${formatCount(value)} confirmed customer projects in this market.`
+          : `${formatCount(value)} opportunities evaluated through ${selectedYear}; ${formatCount(outcomes)} became confirmed customer projects.`,
         evidence: 'Regional totals',
         value,
         cities: region.cities,
@@ -103,7 +104,7 @@
   function visibleItems() {
     if (selectedLayer === 'pursuits' || selectedLayer === 'wins') return normalizePursuitRegions(selectedLayer);
     if (selectedLayer === 'verified') {
-      return dossiers.filter((item) => item.year <= selectedYear && (selectedCategory === 'All' || item.category === selectedCategory)).map((item) => ({
+      return confirmedDossiers.filter((item) => item.year <= selectedYear && (selectedCategory === 'All' || item.category === selectedCategory)).map((item) => ({
         ...item,
         layer: 'verified',
         value: item.level,
@@ -186,24 +187,24 @@
       setMetric(0, summary.pursuits, 'Opportunities evaluated');
       setMetric(1, summary.regions, 'Markets reached');
       setMetric(2, summary.cities, 'Cities & regions');
-      setMetric(3, summary.outcomes, 'Advanced outcomes');
+      setMetric(3, summary.outcomes, 'Confirmed projects');
       status.textContent = `${summary.pursuits} public-sector opportunities across ${summary.regions} markets through ${selectedYear}.`;
       return;
     }
     if (selectedLayer === 'wins') {
-      setMetric(0, meta.recordedWins, 'Advanced outcomes');
-      setMetric(1, meta.winRegions, 'Markets with outcomes');
+      setMetric(0, meta.recordedWins, 'Confirmed projects');
+      setMetric(1, meta.winRegions, 'Customer markets');
       setMetric(2, meta.winCityPairs, 'Cities & regions');
       setMetric(3, 5, 'Solution categories');
-      status.textContent = `${meta.recordedWins} accepted or fulfilled opportunities across ${meta.winRegions} markets.`;
+      status.textContent = `${meta.recordedWins} confirmed customer projects across ${meta.winRegions} markets.`;
       return;
     }
     if (selectedLayer === 'verified') {
-      setMetric(0, items.length, 'Buying pathways');
-      setMetric(1, items.filter((item) => item.confirmed).length, 'Confirmed selections');
-      setMetric(2, items.filter((item) => item.multiYear).length, 'Multi-year contracts');
-      setMetric(3, items.filter((item) => item.po).length, 'Issued orders');
-      status.textContent = `${items.length} documented public buying pathways shown through ${selectedYear}.`;
+      setMetric(0, items.length, 'Confirmed projects');
+      setMetric(1, items.filter((item) => item.multiYear).length, 'Multi-year contracts');
+      setMetric(2, items.filter((item) => item.po).length, 'Issued orders');
+      setMetric(3, new Set(items.map((item) => item.path)).size, 'Buying paths');
+      status.textContent = `${items.length} confirmed customer projects with contract proof shown through ${selectedYear}.`;
       return;
     }
     const jurisdictions = new Set(items.map(getState));
@@ -215,8 +216,8 @@
   }
 
   function itemSummary(item) {
-    if (item.layer === 'pursuits') return `${formatCount(item.value)} opportunities · ${formatCount(item.cities)} cities & regions · ${formatCount(item.outcomes)} advanced outcomes`;
-    if (item.layer === 'wins') return `${formatCount(item.value)} accepted or fulfilled opportunities`;
+    if (item.layer === 'pursuits') return `${formatCount(item.value)} opportunities · ${formatCount(item.cities)} cities & regions · ${formatCount(item.outcomes)} confirmed projects`;
+    if (item.layer === 'wins') return `${formatCount(item.value)} confirmed customer projects`;
     if (item.layer === 'verified') return `${item.path} · ${item.evidence}`;
     return `${item.category} · ${item.year}${item.procurement ? ' · Formal procurement' : ''}${item.documented ? ' · Field documented' : ''}`;
   }
@@ -262,7 +263,7 @@
     playTimer = undefined;
     playButton.classList.remove('is-playing');
     playButton.setAttribute('aria-pressed', 'false');
-    playButton.querySelector('span').textContent = selectedLayer === 'wins' ? 'All outcomes shown' : 'Play growth over time';
+    playButton.querySelector('span').textContent = selectedLayer === 'wins' ? 'All confirmed projects shown' : 'Play growth over time';
   }
 
   function configureControls() {
